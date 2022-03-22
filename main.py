@@ -7,18 +7,18 @@ import requests
 import time
 
 
-# import urllib3.exceptions
-
-
 def main():
     history_url = "https://www.amazon.co.uk/alexa-privacy/apd/rvh/customer-history-records"
     audio_url = "https://www.amazon.co.uk/alexa-privacy/apd/rvh/audio"
 
     history = get_history(history_url)
 
+    print()
+
 
 def get_history(url):
-    history = pd.DataFrame(columns=["timestamp", "transcript", "utterance_id", "device", "person", "utterance_type", "intent"])
+    history = pd.DataFrame(
+        columns=["timestamp", "transcript", "utterance_id", "device", "person", "utterance_type", "intent"])
     params = get_params()
     headers = get_headers()
     done = False
