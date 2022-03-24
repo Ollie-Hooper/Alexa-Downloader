@@ -1,12 +1,12 @@
-import os
-from datetime import datetime
 import json
-
-from warnings import warn
+import os
+import time
 
 import pandas as pd
 import requests
-import time
+
+from datetime import datetime
+from warnings import warn
 
 from seleniumwire import webdriver
 from selenium.webdriver.chrome.service import Service
