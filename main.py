@@ -1,19 +1,44 @@
+import os
 from datetime import datetime
 import json
-import warnings
+
+from warnings import warn
 
 import pandas as pd
 import requests
 import time
+
+from seleniumwire import webdriver
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
 
 
 def main():
     history_url = "https://www.amazon.co.uk/alexa-privacy/apd/rvh/customer-history-records"
     audio_url = "https://www.amazon.co.uk/alexa-privacy/apd/rvh/audio"
 
+    if not os.path.exists('headers.json'):
+        create_headers()
+
     history = get_history(history_url)
 
     print()
+
+
+def create_headers():
+    login_url = "https://www.amazon.co.uk/alexa-privacy/apd/rvh"
+    s = Service(ChromeDriverManager().install())
+    driver = webdriver.Chrome(service=s)
+    driver.get(login_url)
+    try:
+        r = driver.wait_for_request('/alexa-privacy/apd/rvh/customer-history-records', timeout=300)
+        with open("./headers.json", "w") as f:
+            json.dump(dict(r.headers), f)
+    except TimeoutError:
+        warn("Timed out trying to login and get request... quitting")
+        quit()
+    finally:
+        driver.quit()
 
 
 def get_history(url):
@@ -72,11 +97,11 @@ def handle_request(url, params, headers, retry_wait_time=0):
         try:
             return requests.get(url=url, params=params, headers=headers)
         except requests.exceptions.ConnectionError as e:
-            warnings.warn("Error just occurred:")
-            warnings.warn(e)
-            warnings.warn(f"Retrying in {retry_wait_time} second...")
+            warn("Error just occurred:")
+            warn(e)
+            warn(f"Retrying in {retry_wait_time} second...")
             time.sleep(retry_wait_time)
-            warnings.warn("Retrying...")
+            warn("Retrying...")
             continue
 
 
