@@ -6,10 +6,10 @@ import requests
 from warnings import warn
 
 
-def handle_request(url, params, retry_wait_time=0):
+def handle_request(url, params, headers, retry_wait_time=0):
     while True:
         try:
-            return requests.get(url=url, params=params, headers=get_headers())
+            return requests.get(url=url, params=params, headers=headers)
         except requests.exceptions.ConnectionError as e:
             warn("Error just occurred:")
             warn(e)

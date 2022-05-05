@@ -1,13 +1,11 @@
-from alexa_downloader import login, get_history
+from alexa_downloader import AlexaDownloader
 
 
 def main():
-    history_url = "https://www.amazon.co.uk/alexa-privacy/apd/rvh/customer-history-records"
-    audio_url = "https://www.amazon.co.uk/alexa-privacy/apd/rvh/audio"
+    alexa = AlexaDownloader()
+    alexa.login()
 
-    login()
-
-    history = get_history(history_url)
+    history = alexa.get_history()
 
     print()
 
